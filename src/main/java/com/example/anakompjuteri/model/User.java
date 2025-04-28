@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "travel_users")
+@Table(name = "users")
 @NoArgsConstructor
 public class User implements UserDetails {
     @Id
