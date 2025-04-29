@@ -5,6 +5,8 @@ import com.example.anakompjuteri.model.Category;
 import com.example.anakompjuteri.model.Product;
 import com.example.anakompjuteri.repository.ProductRepository;
 import com.example.anakompjuteri.service.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -68,5 +70,10 @@ public class ProductServiceImpl implements ProductService {
         product.setAvailable(productDto.isAvailable());
 
         return productRepository.save(product);
+    }
+
+    @Override
+    public Page<Product> searchProducts(String query, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query, pageable);
     }
 }
