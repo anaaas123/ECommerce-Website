@@ -67,4 +67,15 @@ public class ProductController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(productService.searchProducts(query, pageable));
     }
+
+    @GetMapping("/available")
+    public ResponseEntity<?> getProductsByAvailability(@RequestParam boolean available) {
+        List<Product> products = productService.getProductsByAvailability(available);
+        if (products.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No products found with availability: " + available);
+        }
+        return ResponseEntity.ok(products);
+    }
+
 }

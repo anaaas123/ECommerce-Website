@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProductsByCategory(String category) {
-        return productRepository.findByCategory(String.valueOf(Category.valueOf(category.toUpperCase())));
+        return productRepository.findByCategory(Category.valueOf(String.valueOf(Category.valueOf(category.toUpperCase()))));
     }
 
     @Override
@@ -76,4 +76,10 @@ public class ProductServiceImpl implements ProductService {
     public Page<Product> searchProducts(String query, Pageable pageable) {
         return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query, pageable);
     }
+
+    @Override
+    public List<Product> getProductsByAvailability(boolean available) {
+        return productRepository.findByAvailable(available);
+    }
+
 }
