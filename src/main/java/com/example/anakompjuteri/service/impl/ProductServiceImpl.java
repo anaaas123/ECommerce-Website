@@ -5,6 +5,8 @@ import com.example.anakompjuteri.model.Category;
 import com.example.anakompjuteri.model.Product;
 import com.example.anakompjuteri.repository.ProductRepository;
 import com.example.anakompjuteri.service.ProductService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,17 +40,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "products", key = "#id")
     public Product getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     @Override
+    @Cacheable(value = "products", key = "#category")
     public List<Product> getProductsByCategory(String category) {
         return productRepository.findByCategory(Category.valueOf(String.valueOf(Category.valueOf(category.toUpperCase()))));
     }
 
     @Override
+    @CacheEvict(value = "products", key = "#id")
     public void deleteProduct(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
@@ -59,6 +64,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "products", key = "#id")
     public Product updateProduct(Long id, ProductDTO productDto) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id " + id));
